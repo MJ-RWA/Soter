@@ -15,6 +15,7 @@ import {
 import { ONCHAIN_ADAPTER_TOKEN } from '../src/onchain/onchain.adapter';
 import { SorobanEventCorrelationService } from '../src/onchain/soroban-event-correlation.service';
 import { AuditService } from '../src/audit/audit.service';
+import { AdminActionLogger } from '../src/audit/admin-action-logger.service';
 import { Request } from 'express';
 
 const mockAuditService = {
@@ -108,6 +109,10 @@ describe('AidEscrow Integration Tests', () => {
         {
           provide: AuditService,
           useValue: mockAuditService,
+        },
+        {
+          provide: AdminActionLogger,
+          useValue: new AdminActionLogger(mockAuditService as never),
         },
       ],
     }).compile();
@@ -421,6 +426,7 @@ describe('AidEscrow Integration Tests', () => {
         },
         operatorAddress,
       );
+      mockAuditService.record.mockClear();
 
       const result = await service.extendAidPackageExpiry(
         {
@@ -439,17 +445,24 @@ describe('AidEscrow Integration Tests', () => {
       expect(result.explorerUrl).toBeDefined();
 
       expect(mockAuditService.record).toHaveBeenCalledTimes(1);
-      expect(mockAuditService.record).toHaveBeenCalledWith({
-        actorId: operatorAddress,
-        entity: 'aid_package',
-        entityId: packageId,
-        action: 'extend_expiry',
-        metadata: {
-          oldExpiresAt: initialExpiresAt,
-          newExpiresAt,
-          transactionHash: result.transactionHash,
-        },
-      });
+      expect(mockAuditService.record).toHaveBeenCalledWith(
+        expect.objectContaining({
+          actorId: operatorAddress,
+          entity: 'aid_package',
+          entityId: packageId,
+          action: 'extend_expiry',
+          metadata: {
+            target: { type: 'aid_package', id: packageId },
+            before: { expiresAt: initialExpiresAt },
+            after: { expiresAt: newExpiresAt },
+            details: { transactionHash: result.transactionHash },
+            correlationId: null,
+            outcome: 'success',
+            severity: 'info',
+            error: null,
+          },
+        }),
+      );
     });
 
     it('should reject extension for an already-claimed package', async () => {

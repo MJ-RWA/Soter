@@ -133,7 +133,6 @@ describe('SurplusWithdrawalService', () => {
             before: null,
             after: {
               to: 'GTO',
-              token: 'USDC',
               amount: '1000',
               executableAt: pending.executableAt,
             },
@@ -143,6 +142,9 @@ describe('SurplusWithdrawalService', () => {
           }),
         }),
       );
+      expect(
+        mockAudit.record.mock.calls[0][0].metadata.after,
+      ).not.toHaveProperty('token');
       expect(status.pendingWithdrawal).toEqual(pending);
     });
 
@@ -349,7 +351,10 @@ describe('SurplusWithdrawalService', () => {
         makePending({ executableAt: nowSeconds() - 1 }),
       );
       mockAdapter.executeSurplusWithdrawal.mockRejectedValue(
-        new SurplusWithdrawalTimelockNotElapsedError(),
+        new SurplusWithdrawalTimelockNotElapsedError(
+          'The withdrawal timelock has not elapsed',
+          nowSeconds(),
+        ),
       );
 
       const error = await service.execute(actor).catch(e => e);

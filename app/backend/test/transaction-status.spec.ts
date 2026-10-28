@@ -8,6 +8,11 @@ import { ONCHAIN_ADAPTER_TOKEN } from '../src/onchain/onchain.adapter';
 import { BudgetService } from '../src/common/budget/budget.service';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { SorobanEventCorrelationService } from '../src/onchain/soroban-event-correlation.service';
+import { AdminActionLogger } from '../src/audit/admin-action-logger.service';
+
+const mockAuditService = {
+  record: jest.fn().mockResolvedValue({ id: 'audit-1' }),
+};
 
 const mockEventCorrelationService = {
   getCorrelationsForPackage: jest.fn().mockResolvedValue([]),
@@ -27,6 +32,7 @@ describe('Transaction Status Polling', () => {
 
   beforeEach(async () => {
     mockAdapter = new MockOnchainAdapter();
+    mockAuditService.record.mockClear();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AidEscrowController],
@@ -42,6 +48,10 @@ describe('Transaction Status Polling', () => {
         {
           provide: SorobanEventCorrelationService,
           useValue: mockEventCorrelationService,
+        },
+        {
+          provide: AdminActionLogger,
+          useValue: new AdminActionLogger(mockAuditService as never),
         },
       ],
     }).compile();

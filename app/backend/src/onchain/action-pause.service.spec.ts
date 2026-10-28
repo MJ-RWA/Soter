@@ -88,7 +88,7 @@ describe('ActionPauseService', () => {
         entityId: 'refund',
         action: ACTION_PAUSE_AUDIT_ACTIONS.paused,
         metadata: {
-          target: { type: 'contract_action', id: 'refund' },
+          target: { type: 'ContractActionPause', id: 'refund' },
           before: { isPaused: false, globallyPaused: false },
           after: { isPaused: true, globallyPaused: false },
           correlationId: null,
@@ -98,8 +98,11 @@ describe('ActionPauseService', () => {
       });
       expect(auditService.record.mock.calls[1][0]).toMatchObject({
         actorId: 'ops-2',
+        entity: 'ContractActionPause',
+        entityId: 'refund',
         action: ACTION_PAUSE_AUDIT_ACTIONS.unpaused,
         metadata: {
+          target: { type: 'ContractActionPause', id: 'refund' },
           before: { isPaused: true, globallyPaused: false },
           after: { isPaused: false, globallyPaused: false },
           outcome: 'success',
@@ -129,7 +132,11 @@ describe('ActionPauseService', () => {
       expect(result).toMatchObject({ isPaused: true, globallyPaused: true });
       expect(auditService.record).toHaveBeenLastCalledWith(
         expect.objectContaining({
-          metadata: expect.objectContaining({ globallyPaused: true }),
+          action: ACTION_PAUSE_AUDIT_ACTIONS.unpaused,
+          metadata: expect.objectContaining({
+            before: { isPaused: true, globallyPaused: true },
+            after: { isPaused: true, globallyPaused: true },
+          }),
         }),
       );
 

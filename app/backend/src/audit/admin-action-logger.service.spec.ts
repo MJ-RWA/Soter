@@ -180,7 +180,7 @@ describe('AdminActionLogger', () => {
         before: null,
         correlationId: 'corr-123',
       },
-      () => Promise.resolve({ status: 'failed' as const }),
+      () => Promise.resolve<{ status: string }>({ status: 'failed' }),
       () => ({ status: 'success' }),
       result => result.status === 'success',
     );
