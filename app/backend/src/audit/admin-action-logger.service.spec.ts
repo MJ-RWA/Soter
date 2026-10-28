@@ -152,9 +152,7 @@ describe('AdminActionLogger', () => {
           before: { delegateAddress: null },
           correlationId: 'corr-123',
         },
-        async () => {
-          throw new BadRequestException();
-        },
+        () => Promise.reject(new BadRequestException()),
         () => ({ delegateAddress: 'GDELEGATE' }),
       ),
     ).rejects.toBeInstanceOf(BadRequestException);
@@ -182,7 +180,7 @@ describe('AdminActionLogger', () => {
         before: null,
         correlationId: 'corr-123',
       },
-      async () => ({ status: 'failed' }),
+      () => Promise.resolve({ status: 'failed' as const }),
       () => ({ status: 'success' }),
       result => result.status === 'success',
     );

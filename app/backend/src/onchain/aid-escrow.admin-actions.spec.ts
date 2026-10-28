@@ -2,7 +2,9 @@ import { AdminActionLogger } from '../audit/admin-action-logger.service';
 import { AidEscrowService } from './aid-escrow.service';
 
 describe('AidEscrowService admin actions', () => {
-  const auditService = { record: jest.fn().mockResolvedValue({ id: 'audit-1' }) };
+  const auditService = {
+    record: jest.fn().mockResolvedValue({ id: 'audit-1' }),
+  };
   const adapter = {
     getDelegate: jest.fn(),
     setDelegate: jest.fn(),
@@ -45,7 +47,7 @@ describe('AidEscrowService admin actions', () => {
 
     await service.setDelegate(
       'package-1',
-      { delegateAddress: 'GNEW', expiresAt: 200 } as never,
+      { delegateAddress: 'GNEW', expiresAt: 200 },
       'onchain-signer',
       'admin-1',
       'corr-1',

@@ -169,7 +169,10 @@ describe('AdminTransferService', () => {
       expect(auditService.record).toHaveBeenCalledWith(
         expect.objectContaining({
           action: ADMIN_TRANSFER_AUDIT_ACTIONS.cancelled,
-          metadata: expect.objectContaining({ outcome: 'rejected', after: null }),
+          metadata: expect.objectContaining({
+            outcome: 'rejected',
+            after: null,
+          }),
         }),
       );
     });
@@ -187,7 +190,10 @@ describe('AdminTransferService', () => {
       expect(auditService.record).toHaveBeenCalledWith(
         expect.objectContaining({
           action: ADMIN_TRANSFER_AUDIT_ACTIONS.proposed,
-          metadata: expect.objectContaining({ outcome: 'rejected', after: null }),
+          metadata: expect.objectContaining({
+            outcome: 'rejected',
+            after: null,
+          }),
         }),
       );
     });

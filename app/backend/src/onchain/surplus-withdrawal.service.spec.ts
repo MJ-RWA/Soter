@@ -201,7 +201,10 @@ describe('SurplusWithdrawalService', () => {
       expect(mockAudit.record).toHaveBeenCalledWith(
         expect.objectContaining({
           action: SURPLUS_WITHDRAWAL_AUDIT_ACTIONS.proposed,
-          metadata: expect.objectContaining({ outcome: 'rejected', after: null }),
+          metadata: expect.objectContaining({
+            outcome: 'rejected',
+            after: null,
+          }),
         }),
       );
     });
@@ -266,7 +269,10 @@ describe('SurplusWithdrawalService', () => {
       expect(mockAudit.record).toHaveBeenCalledWith(
         expect.objectContaining({
           action: SURPLUS_WITHDRAWAL_AUDIT_ACTIONS.cancelled,
-          metadata: expect.objectContaining({ outcome: 'rejected', after: null }),
+          metadata: expect.objectContaining({
+            outcome: 'rejected',
+            after: null,
+          }),
         }),
       );
     });
@@ -328,7 +334,10 @@ describe('SurplusWithdrawalService', () => {
       expect(mockAudit.record).toHaveBeenCalledWith(
         expect.objectContaining({
           action: SURPLUS_WITHDRAWAL_AUDIT_ACTIONS.executed,
-          metadata: expect.objectContaining({ outcome: 'rejected', after: null }),
+          metadata: expect.objectContaining({
+            outcome: 'rejected',
+            after: null,
+          }),
         }),
       );
     });

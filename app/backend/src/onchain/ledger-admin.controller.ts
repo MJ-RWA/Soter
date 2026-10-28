@@ -193,7 +193,9 @@ export class LedgerAdminController {
       },
       () => {
         if (startLedger > endLedger) {
-          throw new Error('startLedger must be less than or equal to endLedger');
+          throw new Error(
+            'startLedger must be less than or equal to endLedger',
+          );
         }
         return this.backfillService.triggerBackfill(
           startLedger,
@@ -208,7 +210,8 @@ export class LedgerAdminController {
         'jobId' in result
           ? {
               jobId: result.jobId,
-              checkpointId: 'checkpointId' in result ? result.checkpointId : null,
+              checkpointId:
+                'checkpointId' in result ? result.checkpointId : null,
               status: result.status,
             }
           : null,
@@ -306,14 +309,21 @@ export class LedgerAdminController {
         correlationId: getAdminActionCorrelationId(request),
       },
       async () => {
-        const checkpoint = await this.backfillService.getCheckpoint(checkpointId);
+        const checkpoint =
+          await this.backfillService.getCheckpoint(checkpointId);
         before = checkpoint
-          ? { status: checkpoint.status, lastProcessedLedger: checkpoint.lastProcessedLedger }
+          ? {
+              status: checkpoint.status,
+              lastProcessedLedger: checkpoint.lastProcessedLedger,
+            }
           : null;
         await this.backfillService.cancelBackfill(checkpointId);
         const updated = await this.backfillService.getCheckpoint(checkpointId);
         return updated
-          ? { status: updated.status, lastProcessedLedger: updated.lastProcessedLedger }
+          ? {
+              status: updated.status,
+              lastProcessedLedger: updated.lastProcessedLedger,
+            }
           : null;
       },
       result => result,
@@ -440,7 +450,9 @@ export class LedgerAdminController {
       },
       () => {
         if (startLedger > endLedger) {
-          throw new Error('startLedger must be less than or equal to endLedger');
+          throw new Error(
+            'startLedger must be less than or equal to endLedger',
+          );
         }
         return this.reconciliationService.triggerReconciliation(
           startLedger,

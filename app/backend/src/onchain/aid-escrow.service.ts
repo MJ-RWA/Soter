@@ -698,7 +698,7 @@ export class AidEscrowService {
                 expiresAt: before.expiresAt ?? null,
               }
             : null,
-          details: () => (transactionHash ? { transactionHash } : null),
+        details: () => (transactionHash ? { transactionHash } : null),
         correlationId,
       },
       async () => {
@@ -738,7 +738,7 @@ export class AidEscrowService {
     this.logger.debug('Revoking delegate:', { packageId, admin: adminAddress });
 
     let before: GetDelegateResult | null = null;
-  let transactionHash: string | null = null;
+    let transactionHash: string | null = null;
     const result = await this.adminActionLogger.execute(
       {
         actor: actorId,
@@ -751,7 +751,7 @@ export class AidEscrowService {
                 expiresAt: before.expiresAt ?? null,
               }
             : null,
-          details: () => (transactionHash ? { transactionHash } : null),
+        details: () => (transactionHash ? { transactionHash } : null),
         correlationId,
       },
       async () => {

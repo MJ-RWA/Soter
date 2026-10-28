@@ -63,10 +63,7 @@ export interface AdminActionContext {
   action: string;
   target: AdminActionTarget | null | (() => AdminActionTarget | null);
   before: AdminActionState | null | (() => AdminActionState | null);
-  details?:
-    | AdminActionState
-    | null
-    | (() => AdminActionState | null);
+  details?: AdminActionState | null | (() => AdminActionState | null);
   correlationId: string | null;
 }
 

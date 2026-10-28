@@ -174,5 +174,4 @@ export class ActionPauseService {
     }
     return action;
   }
-
 }

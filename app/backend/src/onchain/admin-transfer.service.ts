@@ -83,14 +83,17 @@ export class AdminTransferService {
                 pendingAdminAddress: before.pendingAdminAddress,
               }
             : null,
-          details: () => (transactionHash ? { transactionHash } : null),
+        details: () => (transactionHash ? { transactionHash } : null),
         correlationId: actor.correlationId ?? null,
       },
       async () => {
         before = await this.onchainAdapter.getAdminState({
           contractId: actor.contractId,
         });
-        if (before.adminAddress && dto.newAdminAddress === before.adminAddress) {
+        if (
+          before.adminAddress &&
+          dto.newAdminAddress === before.adminAddress
+        ) {
           throw new BadRequestException(
             'InvalidPendingAdmin: the nominated address is already the current admin',
           );
@@ -137,7 +140,7 @@ export class AdminTransferService {
                 pendingAdminAddress: before.pendingAdminAddress,
               }
             : null,
-          details: () => (transactionHash ? { transactionHash } : null),
+        details: () => (transactionHash ? { transactionHash } : null),
         correlationId: actor.correlationId ?? null,
       },
       async () => {
@@ -189,7 +192,7 @@ export class AdminTransferService {
                 pendingAdminAddress: before.pendingAdminAddress,
               }
             : null,
-          details: () => (transactionHash ? { transactionHash } : null),
+        details: () => (transactionHash ? { transactionHash } : null),
         correlationId: actor.correlationId ?? null,
       },
       async () => {
